@@ -45,7 +45,7 @@ impl OptionalRegion {
         None
     }
 
-    pub fn new_with_prefix(path: String, chr_prefix: &str) -> Result<Self, Box<Error>> {
+    pub fn new_with_prefix(path: String, chr_prefix: &str) -> Result<Self, Box<dyn Error>> {
         let re = Regex::new(r"^(.+):(\d*)-?(\d*)$").unwrap();
         let caps = re.captures(&path).ok_or("Parse Error")?;
         let mut path_str = caps.get(1).ok_or("Parse Path Error")?.as_str();
@@ -75,9 +75,9 @@ impl OptionalRegion {
         });
     }
 
-    pub fn new(path: String) -> Result<Self, Box<dyn Error>> {
+    pub fn new(path: &str) -> Result<Self, Box<dyn Error>> {
         let re = Regex::new(r"^(.+):(\d*)-?(\d*)$").unwrap();
-        let caps = re.captures(&path).ok_or("Parse Error")?;
+        let caps = re.captures(path).ok_or("Parse Error")?;
         let path = caps.get(1).ok_or("Parse Path Error")?;
         let start = caps.get(2).and_then(|t| t.as_str().parse::<u64>().ok());
         let end = caps.get(3).and_then(|t| t.as_str().parse::<u64>().ok());
@@ -162,9 +162,9 @@ impl StringRegion {
         })
     }
 
-    pub fn new(path: String) -> Result<Self, Box<dyn Error>> {
+    pub fn new(path: &str) -> Result<Self, Box<dyn Error>> {
         let re = Regex::new(r"^(.+):(\d+)-?(\d*)$").unwrap();
-        let caps = re.captures(&path).ok_or("Parse Error")?;
+        let caps = re.captures(path).ok_or("Parse Error")?;
         let path = caps.get(1).ok_or("Parse Path Error")?;
         let start = caps.get(2).ok_or("Parse Start Position Error")?;
         let end = caps.get(3).ok_or("Parse end Position Error")?;
