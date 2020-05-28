@@ -301,15 +301,15 @@ mod tests {
     use super::*;
 
     fn region_format(path: &str) -> String {
-        format!("{}", StringRegion::new(path.to_string()).unwrap())
+        format!("{}", StringRegion::new(path).unwrap())
     }
 
     #[test]
     fn region_works() {
-        assert_eq!(StringRegion::new("".to_string()).ok(), None);
-        assert_eq!(StringRegion::new(":10-20".to_string()).ok(), None);
+        assert_eq!(StringRegion::new("").ok(), None);
+        assert_eq!(StringRegion::new(":10-20").ok(), None);
         assert_eq!(
-            StringRegion::new("chr1:12000-12001".to_string()).ok(),
+            StringRegion::new("chr1:12000-12001").ok(),
             Some(StringRegion {
                 path: "chr1".to_string(),
                 start: 12000,
@@ -317,7 +317,7 @@ mod tests {
             })
         );
         assert_eq!(
-            StringRegion::new("chr1:1200943-1201000".to_string()).ok(),
+            StringRegion::new("chr1:1200943-1201000").ok(),
             Some(StringRegion {
                 path: "chr1".to_string(),
                 start: 1200943,
