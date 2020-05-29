@@ -2,7 +2,7 @@ use regex::Regex;
 use std::error::Error;
 use std::fmt;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct OptionalRegion {
     pub path: String,
     pub start: Option<u64>,
@@ -93,7 +93,7 @@ impl OptionalRegion {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct StringRegion {
     pub path: String, // Requires no prefix
     pub start: u64,
