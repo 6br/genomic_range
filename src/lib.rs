@@ -119,7 +119,13 @@ impl StringRegion {
     pub fn inverted(&self) -> bool {
         self.start > self.end
     }*/
+    pub fn start(&self) -> u64 {
+        self.start
+    }
 
+    pub fn end(&self) -> u64 {
+        self.end
+    }
     // It is used on converting dna-sequence region to bed-style region.
     pub fn start_minus(&mut self) {
         self.start = self.start - 1;
