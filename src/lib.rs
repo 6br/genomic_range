@@ -47,7 +47,7 @@ impl OptionalRegion {
 
     pub fn new_with_prefix(path: String, chr_prefix: &str) -> Result<Self, Box<dyn Error>> {
         let re = Regex::new(r"^(.+):(\d*)-?(\d*)$").unwrap();
-        let caps = re.captures(&path).ok_or("Parse Error")?;
+        let caps = re.captures(&path).ok_or("Invalid genomic range")?;
         let mut path_str = caps.get(1).ok_or("Parse Path Error")?.as_str();
 
         let path_string: String;
@@ -77,7 +77,7 @@ impl OptionalRegion {
 
     pub fn new(path: &str) -> Result<Self, Box<dyn Error>> {
         let re = Regex::new(r"^(.+):(\d*)-?(\d*)$").unwrap();
-        let caps = re.captures(path).ok_or("Parse Error")?;
+        let caps = re.captures(path).ok_or("Invalid genomic range")?;
         let path = caps.get(1).ok_or("Parse Path Error")?;
         let start = caps.get(2).and_then(|t| t.as_str().parse::<u64>().ok());
         let end = caps.get(3).and_then(|t| t.as_str().parse::<u64>().ok());
@@ -133,7 +133,7 @@ impl StringRegion {
 
     pub fn new_with_prefix(path: String, chr_prefix: &str) -> Result<Self, Box<dyn Error>> {
         let re = Regex::new(r"^(.+):(\d+)-?(\d*)$").unwrap();
-        let caps = re.captures(&path).ok_or("Parse Error")?;
+        let caps = re.captures(&path).ok_or("Invalid genomic range")?;
         let mut path_str = caps.get(1).ok_or("Parse Path Error")?.as_str();
         let path_string: String;
         if chr_prefix.len() == 0 {
@@ -170,7 +170,7 @@ impl StringRegion {
 
     pub fn new(path: &str) -> Result<Self, Box<dyn Error>> {
         let re = Regex::new(r"^(.+):(\d+)-?(\d*)$").unwrap();
-        let caps = re.captures(path).ok_or("Parse Error")?;
+        let caps = re.captures(path).ok_or("Invalid genomic range")?;
         let path = caps.get(1).ok_or("Parse Path Error")?;
         let start = caps.get(2).ok_or("Parse Start Position Error")?;
         let end = caps.get(3).ok_or("Parse end Position Error")?;
@@ -232,7 +232,7 @@ impl Region {
         F: Fn(&str) -> Option<u64>,
     {
         let re = Regex::new(r"^(.+):(\d*)-?(\d*)$").unwrap();
-        let caps = re.captures(path).ok_or("Parse Error")?;
+        let caps = re.captures(path).ok_or("Invalid genomic range")?;
         let path = caps
             .get(1)
             .and_then(|t| Some(t.as_str()))
