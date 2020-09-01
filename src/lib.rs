@@ -126,6 +126,14 @@ impl StringRegion {
     pub fn end(&self) -> u64 {
         self.end
     }
+
+    pub fn extend(&mut self, len: u64) {
+        self.start -= len;
+        if self.start <= 0 {
+            self.start = 0;
+        }
+        self.end += len;
+    }
     // It is used on converting dna-sequence region to bed-style region.
     pub fn start_minus(&mut self) {
         self.start = self.start - 1;
