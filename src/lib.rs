@@ -108,7 +108,6 @@ impl fmt::Display for StringRegion {
 }
 
 impl StringRegion {
-    /*
     pub fn interval(&self) -> u64 {
         if self.inverted() {
             return self.start - self.end
@@ -118,7 +117,7 @@ impl StringRegion {
     }
     pub fn inverted(&self) -> bool {
         self.start > self.end
-    }*/
+    }
     pub fn start(&self) -> u64 {
         self.start
     }
