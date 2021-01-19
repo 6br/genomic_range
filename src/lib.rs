@@ -110,9 +110,9 @@ impl fmt::Display for StringRegion {
 impl StringRegion {
     pub fn interval(&self) -> u64 {
         if self.inverted() {
-            return self.start - self.end
+            return self.start - self.end;
         } else {
-            return self.end - self.start
+            return self.end - self.start;
         }
     }
     pub fn inverted(&self) -> bool {
@@ -191,6 +191,27 @@ impl StringRegion {
             .map_err(|e| "Parse Int Error, ".to_string() + &e.to_string())?;
         Ok(StringRegion {
             path: path.as_str().to_string(),
+            start: start_u64,
+            end: end_u64,
+        })
+    }
+
+    pub fn new_separated_by_space(path: &str) -> Result<Self, Box<dyn Error>> {
+        let caps: Vec<&str> = path.split_whitespace().collect();
+        if caps.len() < 3 {
+            return StringRegion::new(path);
+        }
+        let path = caps[0];
+        let start = caps[1];
+        let end = caps[2];
+        let start_u64: u64 = start
+            .parse::<u64>()
+            .map_err(|e| "Parse Int Error, ".to_string() + &e.to_string())?;
+        let end_u64: u64 = end
+            .parse::<u64>()
+            .map_err(|e| "Parse Int Error, ".to_string() + &e.to_string())?;
+        Ok(StringRegion {
+            path: path.to_string(),
             start: start_u64,
             end: end_u64,
         })
