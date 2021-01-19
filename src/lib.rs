@@ -175,7 +175,7 @@ impl StringRegion {
         })
     }
 
-    pub fn new(path: &str) -> Result<Self, Box<dyn Error>> {
+    fn new_regexp(path: &str) -> Result<Self, Box<dyn Error>> {
         let re = Regex::new(r"^(.+):(\d+)-?(\d*)$").unwrap();
         let caps = re.captures(path).ok_or("Invalid genomic range")?;
         let path = caps.get(1).ok_or("Parse Path Error")?;
@@ -196,10 +196,10 @@ impl StringRegion {
         })
     }
 
-    pub fn new_separated_by_space(path: &str) -> Result<Self, Box<dyn Error>> {
+    pub fn new(path: &str) -> Result<Self, Box<dyn Error>> {
         let caps: Vec<&str> = path.split_whitespace().collect();
         if caps.len() < 3 {
-            return StringRegion::new(path);
+            return StringRegion::new_regexp(path);
         }
         let path = caps[0];
         let start = caps[1];
