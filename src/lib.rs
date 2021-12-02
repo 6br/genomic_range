@@ -98,6 +98,7 @@ pub struct StringRegion {
     pub path: String, // Requires no prefix
     pub start: u64,
     pub end: u64,
+    inverted: bool,
 }
 
 impl fmt::Display for StringRegion {
@@ -109,32 +110,26 @@ impl fmt::Display for StringRegion {
 
 impl StringRegion {
     pub fn interval(&self) -> u64 {
-        if self.inverted() {
-            return self.start - self.end;
-        } else {
-            return self.end - self.start;
-        }
+        return self.end - self.start;
     }
     pub fn inverted(&self) -> bool {
-        self.start > self.end
+        self.inverted
     }
     pub fn start(&self) -> u64 {
         self.start
     }
-
     pub fn left(&self) -> u64 {
-        if self.inverted() {
-            return self.start;
+        if self.inverted {
+            return self.end
         } else {
-            return self.end;
+            return self.start
         }
     }
-
     pub fn right(&self) -> u64 {
-        if self.inverted() {
-            return self.end;
+        if self.inverted {
+            return self.start
         } else {
-            return self.start;
+            return self.end
         }
     }
 
@@ -184,11 +179,7 @@ impl StringRegion {
         let end_u64: u64 = end_str
             .parse::<u64>()
             .map_err(|e| "Parse Int Error, ".to_string() + &e.to_string())?;
-        Ok(StringRegion {
-            path: path_string,
-            start: start_u64,
-            end: end_u64,
-        })
+        StringRegion::new_inner(path.to_string(), start_u64, end_u64)
     }
 
     fn new_regexp(path: &str) -> Result<Self, Box<dyn Error>> {
@@ -205,11 +196,7 @@ impl StringRegion {
         let end_u64: u64 = end_str
             .parse::<u64>()
             .map_err(|e| "Parse Int Error, ".to_string() + &e.to_string())?;
-        Ok(StringRegion {
-            path: path.as_str().to_string(),
-            start: start_u64,
-            end: end_u64,
-        })
+        StringRegion::new_inner(path.as_str().to_string(), start_u64, end_u64)
     }
 
     pub fn new(path: &str) -> Result<Self, Box<dyn Error>> {
@@ -226,11 +213,25 @@ impl StringRegion {
         let end_u64: u64 = end
             .parse::<u64>()
             .map_err(|e| "Parse Int Error, ".to_string() + &e.to_string())?;
-        Ok(StringRegion {
-            path: path.to_string(),
-            start: start_u64,
-            end: end_u64,
-        })
+            StringRegion::new_inner(path.to_string(), start_u64, end_u64)
+    }
+
+    fn new_inner(path: String, start_u64: u64, end_u64: u64) -> Result<Self, Box<dyn Error>> {
+        if start_u64 > end_u64 {
+            Ok(StringRegion {
+                path: path.to_string(),
+                start: end_u64,
+                end: start_u64,
+                inverted: true
+            })
+        } else {
+            Ok(StringRegion {
+                path: path.to_string(),
+                start: start_u64,
+                end: end_u64,
+                inverted: false
+            })
+        }
     }
 
     pub fn uuid(&self) -> String {
