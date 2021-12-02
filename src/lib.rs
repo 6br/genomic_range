@@ -216,7 +216,7 @@ impl StringRegion {
             StringRegion::new_inner(path.to_string(), start_u64, end_u64)
     }
 
-    fn new_inner(path: String, start_u64: u64, end_u64: u64) -> Result<Self, Box<dyn Error>> {
+    pub fn new_inner(path: String, start_u64: u64, end_u64: u64) -> Result<Self, Box<dyn Error>> {
         if start_u64 > end_u64 {
             Ok(StringRegion {
                 path: path.to_string(),
