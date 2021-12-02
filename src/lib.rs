@@ -104,7 +104,11 @@ pub struct StringRegion {
 impl fmt::Display for StringRegion {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         // Use `self.number` to refer to each positional data point.
-        write!(f, "{}:{}-{}", self.path, self.start, self.end)
+        if self.inverted {
+            write!(f, "{}:{}-{}", self.path, self.end, self.start)
+        } else {
+            write!(f, "{}:{}-{}", self.path, self.start, self.end)
+        }
     }
 }
 
