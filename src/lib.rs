@@ -122,6 +122,22 @@ impl StringRegion {
         self.start
     }
 
+    pub fn left(&self) -> u64 {
+        if self.inverted() {
+            return self.start;
+        } else {
+            return self.end;
+        }
+    }
+
+    pub fn right(&self) -> u64 {
+        if self.inverted() {
+            return self.end;
+        } else {
+            return self.start;
+        }
+    }
+
     pub fn end(&self) -> u64 {
         self.end
     }
